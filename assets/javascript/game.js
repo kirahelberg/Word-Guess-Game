@@ -1,5 +1,5 @@
 //Create array for word choices
-var wordChoices = [
+const wordChoices = [
   "ellen degeneres",
   "oprah winfrey",
   "kim kardashian",
@@ -28,12 +28,49 @@ var wordChoices = [
   "meryl streep"
 ];
 
-const maxTries = 10; // Maximum number of tries player has
+//Variables for tracking score
+var totalWins = 0;
+var totalLosses = 0;
 
-var guessedLetters = []; // Stores the letters the user guessed
-var currentWordIndex; // Index of the current word in the array
-var guessingWord = []; // This will be the word we actually build to match the current word
-var remainingGuesses = 0; // How many tries the player has left
-var gameStarted = false; // Flag to tell if the game has started
-var hasFinished = false; // Flag for 'press any key to try again'
-var wins = 0; // How many wins has the player racked up
+//Choose word randomly
+var currentWord = wordChoices[Math.floor(Math.random() * wordChoices.length)];
+
+console.log(currentWord);
+
+var answerArray = [];
+var correctLetter = [];
+var wrongLetter = [];
+
+//Create underscore based on length of word
+var generateUnderscore = () => {
+  for (var i = 0; i < currentWord.length; i++) {
+    answerArray.push("_");
+  }
+  return answerArray;
+};
+
+console.log(generateUnderscore());
+
+//User guess
+document.onkeyup = function(event) {
+  // Determines which key was pressed.
+  var userGuess = event.key;
+
+  console.log(userGuess);
+
+  //if user guesses the correct letter, replace the underscore with the letter
+  if (currentWord.indexOf(userGuess) > -1) {
+    correctLetter.push(userGuess);
+    answerArray[currentWord.indexOf(userGuess)] = userGuess;
+    if (answerArray.join(" ") === currentWord) {
+      alert("You Win");
+    }
+  } else {
+    //If user guesses the wrong letter, add to "guessedLetters"
+    wrongLetter.push(userGuess);
+  }
+};
+
+//Display results
+document.getElementById("currentWord").textContent = generateUnderscore();
+document.getElementById("guessedLetters").textContent = wrongLetter;
