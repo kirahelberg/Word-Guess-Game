@@ -3,28 +3,17 @@ const wordChoices = [
   "ellen degeneres",
   "oprah winfrey",
   "kim kardashian",
-  "jimmy fallon",
   "beyonce",
   "dwayne johnson",
   "justin bieber",
   "taylor swift",
-  "jennifer aniston",
   "rihanna",
   "leonardo dicaprio",
   "jennifer lopez",
-  "tom hanks",
-  "george clooney",
-  "robert downey jr",
   "drake",
   "ariana grande",
-  "emma watson",
   "meghan markle",
   "will smith",
-  "denzel washington",
-  "jennifer lawrence",
-  "bruce willis",
-  "emma stone",
-  "liam neeson",
   "meryl streep"
 ];
 
@@ -40,16 +29,22 @@ console.log(currentWord);
 var answerArray = [];
 var correctLetter = [];
 var wrongLetter = [];
+let space = 0;
 
 //Create underscore based on length of word
-var generateUnderscore = () => {
+var showUnderscore = () => {
   for (var i = 0; i < currentWord.length; i++) {
-    answerArray.push("_");
+    if (currentWord[i] === " ") {
+      answerArray.push(" ");
+      space++;
+    } else {
+      answerArray.push("_");
+    }
   }
   return answerArray;
 };
 
-console.log(generateUnderscore());
+console.log(showUnderscore());
 
 //User guess
 document.onkeyup = function(event) {
@@ -72,5 +67,8 @@ document.onkeyup = function(event) {
 };
 
 //Display results
-document.getElementById("currentWord").textContent = generateUnderscore();
+document.getElementById("currentWord").textContent = "";
+for (var i = 0; i < answerArray.length; i++) {
+  document.getElementById("currentWord").innerText += answerArray[i];
+}
 document.getElementById("guessedLetters").textContent = wrongLetter;
