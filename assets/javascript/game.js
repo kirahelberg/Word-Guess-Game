@@ -17,58 +17,92 @@ const wordChoices = [
   "meryl streep"
 ];
 
-//Variables for tracking score
+// Variables
+const maxGuesses = 10;
+var wrongGuess = [];
+var answerArray = [];
+var remainingGuesses = 0;
+var gameStarted = false;
+var gameFinished = false;
 var totalWins = 0;
 var totalLosses = 0;
 
-//Choose word randomly
-var currentWord = wordChoices[Math.floor(Math.random() * wordChoices.length)];
+function resetGame() {
+  remainingGuesses = maxGuesses;
+  gameStarted = false;
 
-console.log(currentWord);
+  var currentWord = wordChoices[Math.floor(Math.random() * wordChoices.length)];
+  wrongGuess = [];
+  answerArray = [];
 
-var answerArray = [];
-var correctLetter = [];
-var wrongLetter = [];
-let space = 0;
-
-//Create underscore based on length of word
-var showUnderscore = () => {
-  for (var i = 0; i < currentWord.length; i++) {
-    if (currentWord[i] === " ") {
-      answerArray.push(" ");
-      space++;
-    } else {
-      answerArray.push("_");
-    }
+  //Add underscore for each letter of current word
+  for (var i = 0; i < wordChoices[currentWord].length; i++) {
+    answerArray.push("_");
   }
-  return answerArray;
-};
+}
 
-console.log(showUnderscore());
+//Display the variables
+function updateDisplay() {
+  document.getElementById("totalWins").textContent = totalWins;
+  document.getElementById("currentWord").textContent = "";
+  for (var i = 0; i < answerArray.length; i++) {
+    document.getElementById("currentWord").innerText += answerArray[i];
+  }
+  document.getElementById("remainingGuesses").textContent = remainingGuesses;
+  if (remainingGuesses <= 0) {
+    gameFinished = true;
+  }
+}
+console.log(currentWord);
+console.log(answerArray);
 
 //User guess
 document.onkeyup = function(event) {
-  // Determines which key was pressed.
-  var userGuess = event.key;
-
-  console.log(userGuess);
-
-  //if user guesses the correct letter, replace the underscore with the letter
-  if (currentWord.indexOf(userGuess) > -1) {
-    correctLetter.push(userGuess);
-    answerArray[currentWord.indexOf(userGuess)] = userGuess;
-    if (answerArray.join(" ") === currentWord) {
-      alert("You Win");
-    }
+  if (gameFinished) {
+    resetGame();
+    gameFinished = false;
   } else {
-    //If user guesses the wrong letter, add to "guessedLetters"
-    wrongLetter.push(userGuess);
+    if (event.keyCode >= 65 && event.leyCode <= 90) {
+      var userGuess = event.key.toLowerCase();
+      gameStarted = true;
+    }
+
+    //Check if letter has been guessed
+    if (wrongGuess.indexOf(letter) === -1) {
+      wrongGuess.push(letter);
+      evaluateGuess(letter);
+    }
   }
+  updateDisplay();
+  checkWin();
 };
 
-//Display results
-document.getElementById("currentWord").textContent = "";
-for (var i = 0; i < answerArray.length; i++) {
-  document.getElementById("currentWord").innerText += answerArray[i];
+console.log(userGuess);
+
+//if user guesses the correct letter, replace the underscore with the letter
+function evaluateGuess(letter) {
+  var positions = [];
+  for (var i = 0; i < wordChoices[currentWord].length; i++) {
+    if (wordChoices[currentWord][i] === letter) {
+      positions.push(i);
+    }
+  }
+  if (positions.length <= 0) {
+    remainingGuesses--;
+  } else {
+    for (var i = 0; i < positions.length; i++) {
+      answerArray[positions[i]] = letter;
+    }
+  }
 }
-document.getElementById("guessedLetters").textContent = wrongLetter;
+
+function checkWin() {
+  if (answerArray.indexOf("_") === -1) {
+    totalWins++;
+    hasFinished = true;
+  }
+}
+//Word option displays as underscores on the page
+//User presses key to guess a letter
+//if the user guesses a letter in the computer word, then the letter replaces the underscore
+//else the user's guess is displayed in guessed letters
