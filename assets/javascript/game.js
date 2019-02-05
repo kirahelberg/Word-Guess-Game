@@ -31,26 +31,14 @@ function resetGame() {
   remainingGuesses = maxGuesses;
   gameStarted = false;
 
+  //PICKING A WORD IS NOT WORKING
   var currentWord = wordChoices[Math.floor(Math.random() * wordChoices.length)];
   wrongGuess = [];
   answerArray = [];
 
   //Add underscore for each letter of current word
-  for (var i = 0; i < wordChoices[currentWord].length; i++) {
+  for (var i = 0; i < currentWord.length; i++) {
     answerArray.push("_");
-  }
-}
-
-//Display the variables
-function updateDisplay() {
-  document.getElementById("totalWins").textContent = totalWins;
-  document.getElementById("currentWord").textContent = "";
-  for (var i = 0; i < answerArray.length; i++) {
-    document.getElementById("currentWord").innerText += answerArray[i];
-  }
-  document.getElementById("remainingGuesses").textContent = remainingGuesses;
-  if (remainingGuesses <= 0) {
-    gameFinished = true;
   }
 }
 console.log(currentWord);
@@ -58,26 +46,36 @@ console.log(answerArray);
 
 //User guess
 document.onkeyup = function(event) {
-  if (gameFinished) {
+  if ((gameFinished = true)) {
     resetGame();
     gameFinished = false;
   } else {
-    if (event.keyCode >= 65 && event.leyCode <= 90) {
+    if (event.keyCode >= 65 && event.keyCode <= 90) {
       var userGuess = event.key.toLowerCase();
       gameStarted = true;
     }
 
     //Check if letter has been guessed
-    if (wrongGuess.indexOf(letter) === -1) {
-      wrongGuess.push(letter);
-      evaluateGuess(letter);
+    if (wrongGuess.indexOf(userGuess) === -1) {
+      wrongGuess.push(userGuess);
+      evaluateGuess(userGuess);
     }
   }
-  updateDisplay();
+
+  //NOT WORKING - USERGUESS UNDEFINED??
+  console.log(userGuess);
+
+  document.getElementById("totalWins").textContent = totalWins;
+  document.getElementById("currentWord").textContent = "";
+  for (var i = 0; i < answerArray.length; i++) {
+    document.getElementById("currentWord").innerText = answerArray[i];
+  }
+  document.getElementById("remainingGuesses").textContent = remainingGuesses;
+  if (remainingGuesses <= 0) {
+    gameFinished = true;
+  }
   checkWin();
 };
-
-console.log(userGuess);
 
 //if user guesses the correct letter, replace the underscore with the letter
 function evaluateGuess(letter) {
@@ -102,7 +100,3 @@ function checkWin() {
     hasFinished = true;
   }
 }
-//Word option displays as underscores on the page
-//User presses key to guess a letter
-//if the user guesses a letter in the computer word, then the letter replaces the underscore
-//else the user's guess is displayed in guessed letters

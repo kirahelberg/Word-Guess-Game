@@ -23,14 +23,23 @@ body {
   padding: 20px 20px 20px 20px;
 }
 
+/*  DISPLAY WORD */
+#currentWord {
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-size: 28px;
+  text-align: center;
+  height: 40px;
+}
+
 /*RESULTS DISPLAY*/
 .row {
   align-content: center;
 }
 .result-container {
   height: fit-content;
-  padding: 10px;
-  margin: 5px;
+  padding-top: 5px;
+  margin: 10px 0px 10px 0px;
   opacity: 0.3;
   background: #ffffff;
   border-radius: 10px;
